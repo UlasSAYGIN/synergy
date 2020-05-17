@@ -1,6 +1,6 @@
 /*
  * synergy -- mouse and keyboard sharing utility
- * Copyright (C) 2012 Synergy Si Ltd.
+ * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2008 Volker Lanz (vl@fidra.de)
  * 
  * This package is free software; you can redistribute it and/or
@@ -27,13 +27,13 @@ class QWidget;
 
 class NewScreenWidget : public QLabel
 {
-	Q_OBJECT
+    Q_OBJECT
 
-	public:
-		NewScreenWidget(QWidget* parent);
+    public:
+        NewScreenWidget(QWidget* parent);
 
-	protected:
-		void mousePressEvent(QMouseEvent* event);
+    protected:
+        void mousePressEvent(QMouseEvent* event);
 };
 
 #endif

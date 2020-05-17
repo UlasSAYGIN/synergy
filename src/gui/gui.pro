@@ -4,20 +4,25 @@ TEMPLATE = app
 TARGET = synergy
 DEFINES += VERSION_STAGE=\\\"$$QMAKE_VERSION_STAGE\\\"
 DEFINES += VERSION_REVISION=\\\"$$QMAKE_VERSION_REVISION\\\"
+DEFINES -= UNICODE
+DEFINES += _MBCS
 DEPENDPATH += . \
     res
 INCLUDEPATH += . \
-    src
-FORMS += res/MainWindowBase.ui \
-    res/AboutDialogBase.ui \
-    res/ServerConfigDialogBase.ui \
-    res/ScreenSettingsDialogBase.ui \
-    res/ActionDialogBase.ui \
-    res/HotkeyDialogBase.ui \
-    res/SettingsDialogBase.ui \
-    res/SetupWizardBase.ui \
-    res/AddClientDialogBase.ui \
-    res/PluginWizardPageBase.ui
+    src \
+    ../lib/shared/
+FORMS += src/MainWindowBase.ui \
+    src/AboutDialogBase.ui \
+    src/ServerConfigDialogBase.ui \
+    src/ScreenSettingsDialogBase.ui \
+    src/ActionDialogBase.ui \
+    src/HotkeyDialogBase.ui \
+    src/SettingsDialogBase.ui \
+    src/SetupWizardBase.ui \
+    src/AddClientDialogBase.ui \
+    src/ActivationDialog.ui \
+    src/CancelActivationDialog.ui \
+    src/FailedLoginDialog.ui
 SOURCES += src/main.cpp \
     src/MainWindow.cpp \
     src/AboutDialog.cpp \
@@ -54,16 +59,16 @@ SOURCES += src/main.cpp \
     src/DataDownloader.cpp \
     src/AddClientDialog.cpp \
     src/CommandProcess.cpp \
-    src/PluginWizardPage.cpp \
-    src/PluginManager.cpp \
     src/CoreInterface.cpp \
     src/Fingerprint.cpp \
     src/SslCertificate.cpp \
-    src/Plugin.cpp \
     src/WebClient.cpp \
-    ../lib/common/PluginVersion.cpp \
-    src/SubscriptionManager.cpp \
-    src/ActivationNotifier.cpp
+    src/ActivationNotifier.cpp \
+    src/ActivationDialog.cpp \
+    src/CancelActivationDialog.cpp \
+    src/FailedLoginDialog.cpp \
+    ../lib/shared/SerialKey.cpp \
+    src/LicenseManager.cpp
 HEADERS += src/MainWindow.h \
     src/AboutDialog.h \
     src/ServerConfig.h \
@@ -100,18 +105,61 @@ HEADERS += src/MainWindow.h \
     src/DataDownloader.h \
     src/AddClientDialog.h \
     src/CommandProcess.h \
-    src/EditionType.h \
-    src/PluginWizardPage.h \
     src/ProcessorArch.h \
-    src/PluginManager.h \
     src/CoreInterface.h \
     src/Fingerprint.h \
     src/SslCertificate.h \
-    src/Plugin.h \
     src/WebClient.h \
-    ../lib/common/PluginVersion.h \
-    src/SubscriptionManager.h \
-    src/ActivationNotifier.h
+    src/ActivationNotifier.h \
+    src/ElevateMode.h \
+    src/ActivationDialog.h \
+    src/CancelActivationDialog.h \
+    src/FailedLoginDialog.h \
+    ../lib/shared/EditionType.h \
+    ../lib/shared/SerialKey.h \
+    src/LicenseManager.h
+TRANSLATIONS = res/lang/gui_ar-SA.ts \
+    res/lang/gui_bg-BG.ts \
+    res/lang/gui_ca-ES.ts \
+    res/lang/gui_cs-CZ.ts \
+    res/lang/gui_cy-GB.ts \
+    res/lang/gui_da-DK.ts \
+    res/lang/gui_de-DE.ts \
+    res/lang/gui_el-GR.ts \
+    res/lang/gui_es-ES.ts \
+    res/lang/gui_et-EE.ts \
+    res/lang/gui_fi-FI.ts \
+    res/lang/gui_fr-FR.ts \
+    res/lang/gui_gl-ES.ts \
+    res/lang/gui_he-IL.ts \
+    res/lang/gui_hr-HR.ts \
+    res/lang/gui_hu-HU.ts \
+    res/lang/gui_id-ID.ts \
+    res/lang/gui_it-IT.ts \
+    res/lang/gui_ja-JP.ts \
+    res/lang/gui_ko-KR.ts \
+    res/lang/gui_lt-LT.ts \
+    res/lang/gui_lv-LV.ts \
+    res/lang/gui_mr-IN.ts \
+    res/lang/gui_nl-NL.ts \
+    res/lang/gui_no-NO.ts \
+    res/lang/gui_pl-PL.ts \
+    res/lang/gui_pt-BR.ts \
+    res/lang/gui_pt-PT.ts \
+    res/lang/gui_ro-RO.ts \
+    res/lang/gui_ru-RU.ts \
+    res/lang/gui_sk-SK.ts \
+    res/lang/gui_sl-SI.ts \
+    res/lang/gui_sq-AL.ts \
+    res/lang/gui_sr-SP.ts \
+    res/lang/gui_sv-SE.ts \
+    res/lang/gui_th-TH.ts \
+    res/lang/gui_tr-TR.ts \
+    res/lang/gui_uk-UA.ts \
+    res/lang/gui_ur-IN.ts \
+    res/lang/gui_vi-VN.ts \
+    res/lang/gui_zh-CN.ts \
+    res/lang/gui_zh-TW.ts
 RESOURCES += res/Synergy.qrc
 RC_FILE = res/win/Synergy.rc
 macx { 
@@ -121,6 +169,8 @@ macx {
     QSYNERGY_ICON.path = Contents/Resources
     QMAKE_BUNDLE_DATA += QSYNERGY_ICON
     LIBS += $$MACX_LIBS
+    HEADERS += src/OSXHelpers.h
+    SOURCES += src/OSXHelpers.mm
 }
 unix:!macx:LIBS += -ldns_sd
 debug { 
@@ -133,11 +183,24 @@ release {
     MOC_DIR = tmp/release
     RCC_DIR = tmp/release
 }
+win32-msvc2015 {
+    LIBS += -lAdvapi32
+    QMAKE_LFLAGS += /NODEFAULTLIB:LIBCMT
+}
+win32-msvc* {
+    contains(QMAKE_HOST.arch, x86):{
+        QMAKE_LFLAGS *= /MACHINE:X86
+        LIBS += -L"$$(BONJOUR_SDK_HOME)/Lib/Win32" -ldnssd
+    }
+
+    contains(QMAKE_HOST.arch, x86_64):{
+        QMAKE_LFLAGS *= /MACHINE:X64
+        LIBS += -L"$$(BONJOUR_SDK_HOME)/Lib/x64" -ldnssd
+    }
+}
 win32 { 
     Debug:DESTDIR = ../../bin/Debug
     Release:DESTDIR = ../../bin/Release
-    LIBS += -L"../../ext/bonjour/x64" \
-        -ldnssd
-    INCLUDEPATH += "$(BONJOUR_SDK_HOME)/Include"
+    INCLUDEPATH += "$$(BONJOUR_SDK_HOME)/Include"
 }
 else:DESTDIR = ../../bin

@@ -1,6 +1,6 @@
 /*
  * synergy -- mouse and keyboard sharing utility
- * Copyright (C) 2012 Synergy Si Ltd.
+ * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2012 Nick Bolton
  * 
  * This package is free software; you can redistribute it and/or
@@ -25,8 +25,8 @@
 int
 main(int argc, char** argv)
 {
-	DaemonApp app;
-	return app.run(argc, argv);
+    DaemonApp app;
+    return app.run(argc, argv);
 }
 
 #elif SYSAPI_WIN32
@@ -37,8 +37,8 @@ main(int argc, char** argv)
 int WINAPI
 WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
-	DaemonApp app;
-	return app.run(__argc, __argv);
+    DaemonApp app;
+    return app.run(__argc, __argv);
 }
 
 #endif

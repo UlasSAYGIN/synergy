@@ -1,6 +1,6 @@
 /*
  * synergy -- mouse and keyboard sharing utility
- * Copyright (C) 2012 Synergy Si Ltd.
+ * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  * 
  * This package is free software; you can redistribute it and/or
@@ -36,6 +36,7 @@
 
 #include <cstring>
 #include <cstdlib>
+#include <algorithm>
 #if X_DISPLAY_MISSING
 #	error X11 is required to build synergy
 #else
@@ -159,15 +160,12 @@ XWindowsScreen::XWindowsScreen(
 
 	// primary/secondary screen only initialization
 	if (m_isPrimary) {
-		// start watching for events on other windows
-		selectEvents(m_root);
-		m_xi2detected = detectXI2();
-
-		if (m_xi2detected) {
 #ifdef HAVE_XI2
+		m_xi2detected = detectXI2();
+		if (m_xi2detected) {
 			selectXIRawMotion();
-#endif
 		} else
+#endif
 		{
 			// start watching for events on other windows
 			selectEvents(m_root);
@@ -744,7 +742,7 @@ XWindowsScreen::registerHotKey(KeyID key, KeyModifierMask mask)
 		LOG((CLOG_WARN "failed to register hotkey %s (id=%04x mask=%04x)", synergy::KeyMap::formatKey(key, mask).c_str(), key, mask));
 		return 0;
 	}
-	
+
 	LOG((CLOG_DEBUG "registered hotkey %s (id=%04x mask=%04x) as id=%d", synergy::KeyMap::formatKey(key, mask).c_str(), key, mask, id));
 	return id;
 }
@@ -826,7 +824,7 @@ void
 XWindowsScreen::fakeMouseButton(ButtonID button, bool press)
 {
 	const unsigned int xButton = mapButtonToX(button);
-	if (xButton != 0) {
+	if (xButton > 0 && xButton < 11) {
 		XTestFakeButtonEvent(m_display, xButton,
 							press ? True : False, CurrentTime);
 		XFlush(m_display);
@@ -975,22 +973,6 @@ XWindowsScreen::saveShape()
 
 	m_w = WidthOfScreen(DefaultScreenOfDisplay(m_display));
 	m_h = HeightOfScreen(DefaultScreenOfDisplay(m_display));
-
-#if HAVE_X11_EXTENSIONS_XRANDR_H
-	if (m_xrandr){
-	  int numSizes;
-	  XRRScreenSize* xrrs;
-	  Rotation rotation;
-	  xrrs = XRRSizes(m_display, DefaultScreen(m_display), &numSizes);
-	  XRRRotations(m_display, DefaultScreen(m_display), &rotation);
-	  if (xrrs != NULL) {
-	    if (rotation & (RR_Rotate_90|RR_Rotate_270) ){
-	      m_w = xrrs->height;
-	      m_h = xrrs->width;
-	    }
-	  }
-	}
-#endif
 
 	// get center of default screen
 	m_xCenter = m_x + (m_w >> 1);
@@ -1178,7 +1160,7 @@ XWindowsScreen::findKeyEvent(Display*, XEvent* xevent, XPointer arg)
 void
 XWindowsScreen::handleSystemEvent(const Event& event, void*)
 {
-	XEvent* xevent = reinterpret_cast<XEvent*>(event.getData());
+	XEvent* xevent = static_cast<XEvent*>(event.getData());
 	assert(xevent != NULL);
 
 	// update key state
@@ -1299,7 +1281,7 @@ XWindowsScreen::handleSystemEvent(const Event& event, void*)
 	// handle the event ourself
 	switch (xevent->type) {
 	case CreateNotify:
-		if (m_isPrimary) {
+		if (m_isPrimary && !m_xi2detected) {
 			// select events on new window
 			selectEvents(xevent->xcreatewindow.window);
 		}
@@ -1441,6 +1423,8 @@ XWindowsScreen::handleSystemEvent(const Event& event, void*)
 					XMoveWindow(m_display, m_window, m_x, m_y);
 					XResizeWindow(m_display, m_window, m_w, m_h);
 				}
+
+				sendEvent(m_events->forIScreen().shapeChanged());
 			}
 		}
 #endif
@@ -1474,6 +1458,7 @@ XWindowsScreen::onKeyPress(XKeyEvent& xkey)
 			keycode = static_cast<KeyButton>(m_lastKeycode);
 			if (keycode == 0) {
 				// no keycode
+				LOG((CLOG_DEBUG1 "event: KeyPress no keycode"));
 				return;
 			}
 		}
@@ -1488,6 +1473,9 @@ XWindowsScreen::onKeyPress(XKeyEvent& xkey)
 							false, false, key, mask, 1, keycode);
 		}
 	}
+    else {
+		LOG((CLOG_DEBUG1 "can't map keycode to key id"));
+    }
 }
 
 void
@@ -1661,8 +1649,10 @@ XWindowsScreen::createBlankCursor() const
 	// this seems just a bit more complicated than really necessary
 
 	// get the closet cursor size to 1x1
-	unsigned int w, h;
+	unsigned int w = 0, h = 0;
 	XQueryBestCursor(m_display, m_root, 1, 1, &w, &h);
+	w = std::max(1u, w);
+	h = std::max(1u, h);
 
 	// make bitmap data for cursor of closet size.  since the cursor
 	// is blank we can use the same bitmap for shape and mask:  all
@@ -1859,8 +1849,12 @@ XWindowsScreen::mapKeyFromX(XKeyEvent* event) const
 		XLookupString(event, dummy, 0, &keysym, NULL);
 	}
 
+	LOG((CLOG_DEBUG2 "mapped code=%d to keysym=0x%04x", event->keycode, keysym));
+
 	// convert key
-	return XWindowsUtil::mapKeySymToKeyID(keysym);
+	KeyID result = XWindowsUtil::mapKeySymToKeyID(keysym);
+	LOG((CLOG_DEBUG2 "mapped keysym=0x%04x to keyID=%d", keysym, result));
+	return result;
 }
 
 ButtonID

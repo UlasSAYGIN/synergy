@@ -1,6 +1,6 @@
 /*
  * synergy -- mouse and keyboard sharing utility
- * Copyright (C) 2012 Synergy Si Ltd.
+ * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2008 Volker Lanz (vl@fidra.de)
  * 
  * This package is free software; you can redistribute it and/or
@@ -25,35 +25,46 @@
 #include "SynergyLocale.h"
 #include "CoreInterface.h"
 
+class MainWindow;
 class AppConfig;
+class BonjourWindows;
 
 class SettingsDialog : public QDialog, public Ui::SettingsDialogBase
 {
-	Q_OBJECT
+    Q_OBJECT
 
-	public:
-		SettingsDialog(QWidget* parent, AppConfig& config);
-		static QString browseForSynergyc(QWidget* parent, const QString& programDir, const QString& synergycName);
-		static QString browseForSynergys(QWidget* parent, const QString& programDir, const QString& synergysName);
+    public:
+        SettingsDialog(QWidget* parent, AppConfig& config);
+        static QString browseForSynergyc(QWidget* parent, const QString& programDir, const QString& synergycName);
+        static QString browseForSynergys(QWidget* parent, const QString& programDir, const QString& synergysName);
+        void allowAutoConfig();
 
-	protected:
-		void accept();
-		void reject();
-		void changeEvent(QEvent* event);
-		AppConfig& appConfig() { return m_AppConfig; }
+    protected:
+        void accept();
+        void reject();
+        void changeEvent(QEvent* event);
+        AppConfig& appConfig() { return m_appConfig; }
 
-	private:
-		AppConfig& m_AppConfig;
-		SynergyLocale m_Locale;
-		CoreInterface m_CoreInterface;
-		bool m_SuppressElevateWarning;
+        /// @brief Causes the dialog to load all the settings from m_appConfig
+        void loadFromConfig();
 
-	private slots:
-		void on_m_pCheckBoxEnableCrypto_toggled(bool checked);
-		void on_m_pCheckBoxElevateMode_toggled(bool checked);
-		void on_m_pComboLanguage_currentIndexChanged(int index);
-		void on_m_pCheckBoxLogToFile_stateChanged(int );
-		void on_m_pButtonBrowseLog_clicked();
+    private:
+        MainWindow* m_pMainWindow;
+        AppConfig& m_appConfig;
+        SynergyLocale m_Locale;
+        CoreInterface m_CoreInterface;
+        BonjourWindows* m_pBonjourWindows;
+
+    private slots:
+        void on_m_pCheckBoxEnableCrypto_toggled(bool checked);
+        void on_m_pComboLanguage_currentIndexChanged(int index);
+        void on_m_pCheckBoxLogToFile_stateChanged(int );
+        void on_m_pButtonBrowseLog_clicked();
+        void on_m_pLabelInstallBonjour_linkActivated(const QString &link);
+
+        /// @brief Handles the toggling of the system scoped radio button
+        ///        As the user scope radio is connected this will fire for either radio button
+        void on_m_pRadioSystemScope_toggled(bool checked);
 };
 
 #endif

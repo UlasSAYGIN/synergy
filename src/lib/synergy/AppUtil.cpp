@@ -1,6 +1,6 @@
 /*
  * synergy -- mouse and keyboard sharing utility
- * Copyright (C) 2012 Synergy Si Ltd.
+ * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  * 
  * This package is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@ AppUtil* AppUtil::s_instance = nullptr;
 AppUtil::AppUtil() :
 m_app(nullptr)
 {
-	s_instance = this;
+    s_instance = this;
 }
 
 AppUtil::~AppUtil()
@@ -33,20 +33,20 @@ AppUtil::~AppUtil()
 void
 AppUtil::adoptApp(IApp* app)
 {
-	app->setByeFunc(&exitAppStatic);
-	m_app = app;
+    app->setByeFunc(&exitAppStatic);
+    m_app = app;
 }
 
 IApp&
 AppUtil::app() const
 {
-	assert(m_app != nullptr);
-	return *m_app;
+    assert(m_app != nullptr);
+    return *m_app;
 }
 
 AppUtil&
 AppUtil::instance()
 {
-	assert(s_instance != nullptr);
-	return *s_instance;
+    assert(s_instance != nullptr);
+    return *s_instance;
 }

@@ -1,6 +1,6 @@
 /*
  * synergy -- mouse and keyboard sharing utility
- * Copyright (C) 2012 Synergy Si Ltd.
+ * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  * 
  * This package is free software; you can redistribute it and/or
@@ -765,6 +765,15 @@ Config::readSectionOptions(ConfigReadContext& s)
 		else if (name == "win32KeepForeground") {
 			addOption("", kOptionWin32KeepForeground, s.parseBoolean(value));
 		}
+		else if (name == "disableLockToScreen") {
+			addOption("", kOptionDisableLockToScreen, s.parseBoolean(value));
+		}
+		else if (name == "clipboardSharing") {
+			addOption("", kOptionClipboardSharing, s.parseBoolean(value));
+		}
+		else if (name == "clipboardSharingSize") {
+			addOption("", kOptionClipboardSharingSize, s.parseInt(value));
+		}
 		else {
 			handled = false;
 		}
@@ -1232,6 +1241,26 @@ Config::parseAction(ConfigReadContext& s,
 		action = new InputFilter::LockCursorToScreenAction(m_events, mode);
 	}
 
+    else if (name == "restartServer") {
+        if (args.size() > 1) {
+            throw XConfigRead(s, "syntax for action: restartServer([{{restart}}])");
+        }
+
+        InputFilter::RestartServer::Mode mode =
+                InputFilter::RestartServer::restart;
+
+        if (args.size() == 1) {
+            if (args[0] == "restart") {
+                mode = InputFilter::RestartServer::restart;
+            }
+            else {
+                throw XConfigRead(s, "syntax for action: restartServer([{restart}])");
+            }
+        }
+
+        action = new InputFilter::RestartServer(m_events, mode);
+    }
+
 	else if (name == "keyboardBroadcast") {
 		if (args.size() > 2) {
 			throw XConfigRead(s, "syntax for action: keyboardBroadcast([{off|on|toggle}[,screens]])");
@@ -1376,6 +1405,15 @@ Config::getOptionName(OptionID id)
 	if (id == kOptionScreenPreserveFocus) {
 		return "preserveFocus";
 	}
+	if (id == kOptionDisableLockToScreen) {
+		return "disableLockToScreen";
+	}
+	if (id == kOptionClipboardSharing) {
+		return "clipboardSharing";
+	}
+	if (id == kOptionClipboardSharingSize) {
+		return "clipboardSharingSize";
+	}
 	return NULL;
 }
 
@@ -1392,7 +1430,9 @@ Config::getOptionValue(OptionID id, OptionValue value)
 		id == kOptionXTestXineramaUnaware ||
 		id == kOptionRelativeMouseMoves ||
 		id == kOptionWin32KeepForeground ||
-		id == kOptionScreenPreserveFocus) {
+		id == kOptionScreenPreserveFocus ||
+		id == kOptionClipboardSharing ||
+		id == kOptionClipboardSharingSize) {
 		return (value != 0) ? "true" : "false";
 	}
 	if (id == kOptionModifierMapForShift ||
@@ -2088,11 +2128,11 @@ ConfigReadContext::parseInterval(const ArgList& args) const
 	}
 
 	char* end;
-	long startValue = strtol(args[0].c_str(), &end, 10);
+	double startValue = strtod(args[0].c_str(), &end);
 	if (end[0] != '\0') {
 		throw XConfigRead(*this, "invalid interval \"%{1}\"", concatArgs(args));
 	}
-	long endValue = strtol(args[1].c_str(), &end, 10);
+	double endValue = strtod(args[1].c_str(), &end);
 	if (end[0] != '\0') {
 		throw XConfigRead(*this, "invalid interval \"%{1}\"", concatArgs(args));
 	}
@@ -2103,7 +2143,9 @@ ConfigReadContext::parseInterval(const ArgList& args) const
 		throw XConfigRead(*this, "invalid interval \"%{1}\"", concatArgs(args));
 	}
 
-	return Config::Interval(startValue / 100.0f, endValue / 100.0f);
+	float startInterval = static_cast<float>(startValue / 100.0f);
+	float endInterval = static_cast<float>(endValue / 100.0f);
+	return Config::Interval(startInterval, endInterval);
 }
 
 void

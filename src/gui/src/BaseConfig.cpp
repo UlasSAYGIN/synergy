@@ -1,6 +1,6 @@
 /*
  * synergy -- mouse and keyboard sharing utility
- * Copyright (C) 2012 Synergy Si Ltd.
+ * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2008 Volker Lanz (vl@fidra.de)
  * 
  * This package is free software; you can redistribute it and/or
@@ -20,27 +20,27 @@
 
 const char* BaseConfig::m_ModifierNames[] =
 {
-	"shift",
-	"ctrl",
-	"alt",
-	"meta",
-	"super",
-	"none"
+    "shift",
+    "ctrl",
+    "alt",
+    "meta",
+    "super",
+    "none"
 };
 
 const char* BaseConfig::m_FixNames[] =
 {
-	"halfDuplexCapsLock",
-	"halfDuplexNumLock",
-	"halfDuplexScrollLock",
-	"xtestIsXineramaUnaware"
+    "halfDuplexCapsLock",
+    "halfDuplexNumLock",
+    "halfDuplexScrollLock",
+    "xtestIsXineramaUnaware"
 };
 
 const char* BaseConfig::m_SwitchCornerNames[] =
 {
-	"top-left",
-	"top-right",
-	"bottom-left",
-	"bottom-right"
+    "top-left",
+    "top-right",
+    "bottom-left",
+    "bottom-right"
 };
 

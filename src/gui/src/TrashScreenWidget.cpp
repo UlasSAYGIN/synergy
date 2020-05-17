@@ -1,6 +1,6 @@
 /*
  * synergy -- mouse and keyboard sharing utility
- * Copyright (C) 2012 Synergy Si Ltd.
+ * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2008 Volker Lanz (vl@fidra.de)
  * 
  * This package is free software; you can redistribute it and/or
@@ -24,20 +24,20 @@
 
 void TrashScreenWidget::dragEnterEvent(QDragEnterEvent* event)
 {
-	if (event->mimeData()->hasFormat(ScreenSetupModel::mimeType()))
-	{
-		event->setDropAction(Qt::MoveAction);
-		event->accept();
-	}
-	else
-		event->ignore();
+    if (event->mimeData()->hasFormat(ScreenSetupModel::mimeType()))
+    {
+        event->setDropAction(Qt::MoveAction);
+        event->accept();
+    }
+    else
+        event->ignore();
 }
 
 void TrashScreenWidget::dropEvent(QDropEvent* event)
 {
-	if (event->mimeData()->hasFormat(ScreenSetupModel::mimeType()))
-		event->acceptProposedAction();
-	else
-		event->ignore();
+    if (event->mimeData()->hasFormat(ScreenSetupModel::mimeType()))
+        event->acceptProposedAction();
+    else
+        event->ignore();
 }
 

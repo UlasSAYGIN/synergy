@@ -1,6 +1,6 @@
 /*
  * synergy -- mouse and keyboard sharing utility
- * Copyright (C) 2014 Synergy Si Ltd.
+ * Copyright (C) 2014-2016 Symless Ltd.
  *
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,19 +20,19 @@
 #include <QtNetwork>
 
 ZeroconfThread::ZeroconfThread(int socketDescriptor, QObject* parent) :
-	QThread(parent),
-	m_SocketDescriptor(socketDescriptor)
+    QThread(parent),
+    m_SocketDescriptor(socketDescriptor)
 {
 }
 
 void ZeroconfThread::run()
 {
-	QTcpSocket tcpSocket;
-	if (!tcpSocket.setSocketDescriptor(m_SocketDescriptor)) {
-		emit error(tcpSocket.error());
-		return;
-	}
+    QTcpSocket tcpSocket;
+    if (!tcpSocket.setSocketDescriptor(m_SocketDescriptor)) {
+        emit error(tcpSocket.error());
+        return;
+    }
 
-	tcpSocket.disconnectFromHost();
-	tcpSocket.waitForDisconnected();
+    tcpSocket.disconnectFromHost();
+    tcpSocket.waitForDisconnected();
 }

@@ -1,6 +1,6 @@
 /*
  * synergy -- mouse and keyboard sharing utility
- * Copyright (C) 2015 Synergy Si Ltd.
+ * Copyright (C) 2015-2016 Symless Ltd.
  *
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,78 +22,52 @@
 
 #include <QCoreApplication>
 #include <QProcess>
+#include <QtGlobal>
+#include <QDir>
 #include <stdexcept>
 
 static const char kCoreBinary[] = "syntool";
+
+#ifdef Q_WS_WIN
+static const char kSerialKeyFilename[] = "Synergy.subkey";
+#else
+static const char kSerialKeyFilename[] = ".synergy.subkey";
+#endif
 
 CoreInterface::CoreInterface()
 {
 }
 
-QString CoreInterface::getPluginDir()
-{
-	QStringList args("--get-plugin-dir");
-	return run(args);
-}
-
 QString CoreInterface::getProfileDir()
 {
-	QStringList args("--get-profile-dir");
-	return run(args);
+    QStringList args("--get-profile-dir");
+    return run(args);
 }
 
 QString CoreInterface::getInstalledDir()
 {
-	QStringList args("--get-installed-dir");
-	return run(args);
+    QStringList args("--get-installed-dir");
+    return run(args);
 }
 
 QString CoreInterface::getArch()
 {
-	QStringList args("--get-arch");
-	return run(args);
+    QStringList args("--get-arch");
+    return run(args);
 }
 
-QString CoreInterface::getSubscriptionFilename()
+QString CoreInterface::getSerialKeyFilePath()
 {
-	QStringList args("--get-subscription-filename");
-	return run(args);
-}
-
-QString CoreInterface::activateSerial(const QString& serial)
-{
-	QStringList args("--subscription-serial");
-	args << serial;
-
-	return run(args);
-}
-
-QString CoreInterface::checkSubscription()
-{
-	QStringList args("--check-subscription");
-	return run(args);
-}
-
-QString CoreInterface::notifyActivation(const QString& identity)
-{
-	QStringList args("--notify-activation");
-
-	QString input(identity + ":" + hash(getFirstMacAddress()));
-	QString os= getOSInformation();
-	if (!os.isEmpty()) {
-		input.append(":").append(os);
-	}
-	input.append("\n");
-
-	return run(args, input);
+    QString filename = getProfileDir() + QDir::separator() + kSerialKeyFilename;
+    return filename;
 }
 
 QString CoreInterface::run(const QStringList& args, const QString& input)
 {
-	QString program(
-		QCoreApplication::applicationDirPath()
-		+ "/" + kCoreBinary);
+    QString program(
+        QCoreApplication::applicationDirPath()
+        + "/" + kCoreBinary);
 
-	CommandProcess commandProcess(program, args, input);
-	return commandProcess.run();
+    CommandProcess commandProcess(program, args, input);
+    return commandProcess.run();
 }

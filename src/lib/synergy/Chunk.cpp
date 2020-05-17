@@ -1,6 +1,6 @@
 /*
  * synergy -- mouse and keyboard sharing utility
- * Copyright (C) 2015 Synergy Si Inc.
+ * Copyright (C) 2015-2016 Symless Ltd.
  * 
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,13 +18,13 @@
 #include "synergy/Chunk.h"
 #include "base/String.h"
 
-Chunk::Chunk(size_t size)
+Chunk::Chunk(size_t size): m_dataSize(0)
 {
-	m_chunk = new char[size];
-	memset(m_chunk, 0, size);
+    m_chunk = new char[size];
+    memset(m_chunk, 0, size);
 }
 
 Chunk::~Chunk()
 {
-	delete[] m_chunk;
+    delete[] m_chunk;
 }

@@ -1,6 +1,6 @@
 /*
  * synergy -- mouse and keyboard sharing utility
- * Copyright (C) 2012 Synergy Si Ltd.
+ * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  * 
  * This package is free software; you can redistribute it and/or
@@ -30,17 +30,17 @@ AppUtilUnix::~AppUtilUnix()
 int
 standardStartupStatic(int argc, char** argv)
 {
-	return AppUtil::instance().app().standardStartup(argc, argv);
+    return AppUtil::instance().app().standardStartup(argc, argv);
 }
 
 int
 AppUtilUnix::run(int argc, char** argv)
 {
-	return app().runInner(argc, argv, NULL, &standardStartupStatic);
+    return app().runInner(argc, argv, NULL, &standardStartupStatic);
 }
 
 void
 AppUtilUnix::startNode()
 {
-	app().startNode();
+    app().startNode();
 }

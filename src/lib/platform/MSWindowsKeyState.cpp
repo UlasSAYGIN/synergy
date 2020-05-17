@@ -1,12 +1,12 @@
 /*
  * synergy -- mouse and keyboard sharing utility
- * Copyright (C) 2012 Synergy Si Ltd.
+ * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2003 Chris Schoeneman
- * 
+ *
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * found in the file LICENSE that should have accompanied this file.
- * 
+ *
  * This package is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -61,17 +61,17 @@ const KeyID				MSWindowsKeyState::s_virtualKey[] =
 	/* 0x012 */ { kKeyAlt_L },		// VK_MENU
 	/* 0x013 */ { kKeyPause },		// VK_PAUSE
 	/* 0x014 */ { kKeyCapsLock },	// VK_CAPITAL
-	/* 0x015 */ { kKeyHangulKana },	// VK_HANGUL, VK_KANA
+	/* 0x015 */ { kKeyKana },		// VK_HANGUL, VK_KANA
 	/* 0x016 */ { kKeyNone },		// undefined
 	/* 0x017 */ { kKeyNone },		// VK_JUNJA
 	/* 0x018 */ { kKeyNone },		// VK_FINAL
-	/* 0x019 */ { kKeyHanjaKanzi },	// VK_KANJI
+	/* 0x019 */ { kKeyKanzi },		// VK_HANJA, VK_KANJI
 	/* 0x01a */ { kKeyNone },		// undefined
 	/* 0x01b */ { kKeyEscape },		// VK_ESCAPE
-	/* 0x01c */ { kKeyHenkan },		// VK_CONVERT		
-	/* 0x01d */ { kKeyNone },		// VK_NONCONVERT	
-	/* 0x01e */ { kKeyNone },		// VK_ACCEPT		
-	/* 0x01f */ { kKeyNone },		// VK_MODECHANGE	
+	/* 0x01c */ { kKeyHenkan },		// VK_CONVERT
+	/* 0x01d */ { kKeyNone },		// VK_NONCONVERT
+	/* 0x01e */ { kKeyNone },		// VK_ACCEPT
+	/* 0x01f */ { kKeyNone },		// VK_MODECHANGE
 	/* 0x020 */ { kKeyNone },		// VK_SPACE
 	/* 0x021 */ { kKeyKP_PageUp },	// VK_PRIOR
 	/* 0x022 */ { kKeyKP_PageDown },// VK_NEXT
@@ -286,15 +286,15 @@ const KeyID				MSWindowsKeyState::s_virtualKey[] =
 	/* 0x0f3 */ { kKeyZenkaku },	// VK_OEM_AUTO
 	/* 0x0f4 */ { kKeyZenkaku },	// VK_OEM_ENLW
 	/* 0x0f5 */ { kKeyNone },		// OEM specific
-	/* 0x0f6 */ { kKeyNone },		// VK_ATTN			
-	/* 0x0f7 */ { kKeyNone },		// VK_CRSEL			
-	/* 0x0f8 */ { kKeyNone },		// VK_EXSEL			
-	/* 0x0f9 */ { kKeyNone },		// VK_EREOF			
-	/* 0x0fa */ { kKeyNone },		// VK_PLAY			
-	/* 0x0fb */ { kKeyNone },		// VK_ZOOM			
+	/* 0x0f6 */ { kKeyNone },		// VK_ATTN
+	/* 0x0f7 */ { kKeyNone },		// VK_CRSEL
+	/* 0x0f8 */ { kKeyNone },		// VK_EXSEL
+	/* 0x0f9 */ { kKeyNone },		// VK_EREOF
+	/* 0x0fa */ { kKeyNone },		// VK_PLAY
+	/* 0x0fb */ { kKeyNone },		// VK_ZOOM
 	/* 0x0fc */ { kKeyNone },		// reserved
-	/* 0x0fd */ { kKeyNone },		// VK_PA1			
-	/* 0x0fe */ { kKeyNone },		// VK_OEM_CLEAR		
+	/* 0x0fd */ { kKeyNone },		// VK_PA1
+	/* 0x0fe */ { kKeyNone },		// VK_OEM_CLEAR
 	/* 0x0ff */ { kKeyNone },		// reserved
 
 	/* 0x100 */ { kKeyNone },		// reserved
@@ -318,17 +318,17 @@ const KeyID				MSWindowsKeyState::s_virtualKey[] =
 	/* 0x112 */ { kKeyAlt_R },		// VK_MENU
 	/* 0x113 */ { kKeyNone },		// VK_PAUSE
 	/* 0x114 */ { kKeyNone },		// VK_CAPITAL
-	/* 0x115 */ { kKeyNone },		// VK_KANA			
-	/* 0x116 */ { kKeyNone },		// VK_HANGUL		
-	/* 0x117 */ { kKeyNone },		// VK_JUNJA			
-	/* 0x118 */ { kKeyNone },		// VK_FINAL			
-	/* 0x119 */ { kKeyNone },		// VK_KANJI			
+	/* 0x115 */ { kKeyHangul },		// VK_HANGUL
+	/* 0x116 */ { kKeyNone },		// undefined
+	/* 0x117 */ { kKeyNone },		// VK_JUNJA
+	/* 0x118 */ { kKeyNone },		// VK_FINAL
+	/* 0x119 */ { kKeyHanja },		// VK_HANJA
 	/* 0x11a */ { kKeyNone },		// undefined
 	/* 0x11b */ { kKeyNone },		// VK_ESCAPE
-	/* 0x11c */ { kKeyNone },		// VK_CONVERT		
-	/* 0x11d */ { kKeyNone },		// VK_NONCONVERT	
-	/* 0x11e */ { kKeyNone },		// VK_ACCEPT		
-	/* 0x11f */ { kKeyNone },		// VK_MODECHANGE	
+	/* 0x11c */ { kKeyNone },		// VK_CONVERT
+	/* 0x11d */ { kKeyNone },		// VK_NONCONVERT
+	/* 0x11e */ { kKeyNone },		// VK_ACCEPT
+	/* 0x11f */ { kKeyNone },		// VK_MODECHANGE
 	/* 0x120 */ { kKeyNone },		// VK_SPACE
 	/* 0x121 */ { kKeyPageUp },		// VK_PRIOR
 	/* 0x122 */ { kKeyPageDown },	// VK_NEXT
@@ -543,15 +543,15 @@ const KeyID				MSWindowsKeyState::s_virtualKey[] =
 	/* 0x1f3 */ { kKeyNone },		// VK_OEM_AUTO
 	/* 0x1f4 */ { kKeyNone },		// VK_OEM_ENLW
 	/* 0x1f5 */ { kKeyNone },		// OEM specific
-	/* 0x1f6 */ { kKeyNone },		// VK_ATTN			
-	/* 0x1f7 */ { kKeyNone },		// VK_CRSEL			
-	/* 0x1f8 */ { kKeyNone },		// VK_EXSEL			
-	/* 0x1f9 */ { kKeyNone },		// VK_EREOF			
-	/* 0x1fa */ { kKeyNone },		// VK_PLAY			
-	/* 0x1fb */ { kKeyNone },		// VK_ZOOM			
+	/* 0x1f6 */ { kKeyNone },		// VK_ATTN
+	/* 0x1f7 */ { kKeyNone },		// VK_CRSEL
+	/* 0x1f8 */ { kKeyNone },		// VK_EXSEL
+	/* 0x1f9 */ { kKeyNone },		// VK_EREOF
+	/* 0x1fa */ { kKeyNone },		// VK_PLAY
+	/* 0x1fb */ { kKeyNone },		// VK_ZOOM
 	/* 0x1fc */ { kKeyNone },		// reserved
-	/* 0x1fd */ { kKeyNone },		// VK_PA1			
-	/* 0x1fe */ { kKeyNone },		// VK_OEM_CLEAR		
+	/* 0x1fd */ { kKeyNone },		// VK_PA1
+	/* 0x1fe */ { kKeyNone },		// VK_OEM_CLEAR
 	/* 0x1ff */ { kKeyNone }		// reserved
 };
 
@@ -727,6 +727,10 @@ MSWindowsKeyState::mapKeyFromEvent(WPARAM charAndVirtKey,
 			// are down) but we don't want the client to have to match
 			// that so we clear it.
 			active &= ~s_controlAlt;
+		}
+		if (id == kKeyHangul) {
+			// If shift-space is used to change input mode, clear shift modifier.
+			active &= ~KeyModifierShift;
 		}
 		*maskOut = active;
 	}
@@ -955,7 +959,7 @@ MSWindowsKeyState::getKeyMap(synergy::KeyMap& keyMap)
 			// deal with certain virtual keys specially
 			switch (vk) {
 			case VK_SHIFT:
-				// this is important for sending the correct modifier to the 
+				// this is important for sending the correct modifier to the
 				// client, a patch from bug #242 (right shift broken for ms
 				// remote desktop) removed this to just use left shift, which
 				// caused bug #2799 (right shift broken for osx).
@@ -1071,13 +1075,15 @@ MSWindowsKeyState::getKeyMap(synergy::KeyMap& keyMap)
 			}
 		}
 
-		// add alt+printscreen
+		// add the extended printscreen (alt+printscreen)
+        // or maybe it's the non-extended printscreen?
+        // scancodes and keyboard inputs are complicated
 		if (m_buttonToVK[0x54u] == 0) {
 			m_buttonToVK[0x54u] = VK_SNAPSHOT;
 		}
 
 		// set virtual key to button table
-		if (GetKeyboardLayout(0) == m_groups[g]) {
+		if (activeLayout == m_groups[g]) {
 			for (KeyButton i = 0; i < 512; ++i) {
 				if (m_buttonToVK[i] != 0) {
 					if (m_virtualKeyToButton[m_buttonToVK[i]] == 0) {
@@ -1177,7 +1183,7 @@ MSWindowsKeyState::getKeyMap(synergy::KeyMap& keyMap)
 								}
 							}
 						}
-						
+
 						// save each key.  the map will automatically discard
 						// duplicates, like an unshift and shifted version of
 						// a key that's insensitive to shift.
@@ -1211,14 +1217,8 @@ MSWindowsKeyState::getKeyMap(synergy::KeyMap& keyMap)
 						item.m_sensitive |= KeyModifierControl;
 						break;
 
-					case VK_SNAPSHOT:
-						item.m_sensitive |= KeyModifierAlt;
-						if ((i & 0x100u) == 0) {
-							// non-extended snapshot key requires alt
-							item.m_required |= KeyModifierAlt;
-						}
-						break;
 					}
+
 					addKeyEntry(keyMap, item);
 				}
 			}
@@ -1235,7 +1235,7 @@ MSWindowsKeyState::fakeKey(const Keystroke& keystroke)
 	switch (keystroke.m_type) {
 	case Keystroke::kButton: {
 		LOG((CLOG_DEBUG1 "  %03x (%08x) %s", keystroke.m_data.m_button.m_button, keystroke.m_data.m_button.m_client, keystroke.m_data.m_button.m_press ? "down" : "up"));
-		KeyButton button = keystroke.m_data.m_button.m_button;
+		KeyButton scanCode = keystroke.m_data.m_button.m_button;
 
 		// windows doesn't send key ups for key repeats
 		if (keystroke.m_data.m_button.m_repeat &&
@@ -1245,24 +1245,27 @@ MSWindowsKeyState::fakeKey(const Keystroke& keystroke)
 		}
 
 		// get the virtual key for the button
-		UINT vk = keystroke.m_data.m_button.m_client;
+		WORD vk = (WORD)keystroke.m_data.m_button.m_client;
+		DWORD flags = 0;
+
+		if (keystroke.m_data.m_button.m_press == false)
+			flags |= KEYEVENTF_KEYUP;
 
 		// special handling of VK_SNAPSHOT
-		if (vk == VK_SNAPSHOT) {
-			if ((getActiveModifiers() & KeyModifierAlt) != 0) {
-				// snapshot active window
-				button = 1;
-			}
-			else {
-				// snapshot full screen
-				button = 0;
-			}
-		}
+		if (vk == VK_SNAPSHOT)
+			scanCode = (getActiveModifiers() & KeyModifierAlt) ? 0x54 : 0x137;
+
+		if (scanCode & 0x100)
+			flags |= KEYEVENTF_EXTENDEDKEY;
+
+		//vk,sc,flags,keystroke.m_data.m_button.m_repeat
+
+		m_desks->fakeKeyEvent(vk, scanCode, flags, keystroke.m_data.m_button.m_repeat);
 
 		// synthesize event
-		m_desks->fakeKeyEvent(button, vk,
-								keystroke.m_data.m_button.m_press,
-								keystroke.m_data.m_button.m_repeat);
+		//m_desks->fakeKeyEvent(button, vk,
+		//						keystroke.m_data.m_button.m_press,
+		//						keystroke.m_data.m_button.m_repeat);
 		break;
 	}
 
@@ -1339,8 +1342,20 @@ MSWindowsKeyState::setWindowGroup(SInt32 group)
 }
 
 KeyID
-MSWindowsKeyState::getKeyID(UINT virtualKey, KeyButton button)
+MSWindowsKeyState::getKeyID(UINT virtualKey, KeyButton button) const
 {
+	// Some virtual keycodes have same values.
+	// VK_HANGUL == VK_KANA, VK_HANJA == NK_KANJI
+	// which are used to change the input mode of IME.
+	// But they have different X11 keysym. So we should distinguish them.
+	if ((LOWORD(m_keyLayout) & 0xffffu) == 0x0412u) {	// 0x0412 : Korean Locale ID
+		if (virtualKey == VK_HANGUL || virtualKey == VK_HANJA) {
+			// If shift-space is used to change the input mode,
+			// the extented bit is not set. So add it to get right key id.
+			button |= 0x100u;
+		}
+	}
+
 	if ((button & 0x100u) != 0) {
 		virtualKey += 0x100u;
 	}
@@ -1363,7 +1378,7 @@ MSWindowsKeyState::getIDForKey(synergy::KeyMap::KeyItem& item,
 		virtualKey, button, keyState, unicode,
 		sizeof(unicode) / sizeof(unicode[0]), 0, hkl);
 	KeyID id = static_cast<KeyID>(unicode[0]);
-	
+
 	switch (n) {
 	case -1:
 		return synergy::KeyMap::getDeadKey(id);
@@ -1392,3 +1407,4 @@ MSWindowsKeyState::addKeyEntry(synergy::KeyMap& keyMap, synergy::KeyMap::KeyItem
 		m_keyToVKMap[item.m_id] = static_cast<UINT>(item.m_client);
 	}
 }
+

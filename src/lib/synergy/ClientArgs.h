@@ -1,6 +1,6 @@
 /*
  * synergy -- mouse and keyboard sharing utility
- * Copyright (C) 2014 Synergy Si, Inc.
+ * Copyright (C) 2014-2016 Symless Ltd.
  * 
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +23,8 @@ class NetworkAddress;
 
 class ClientArgs : public ArgsBase {
 public:
-	ClientArgs();
+    ClientArgs();
 
 public:
-	int					m_yscroll;
+    int                    m_yscroll;
 };

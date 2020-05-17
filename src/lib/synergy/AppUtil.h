@@ -1,6 +1,6 @@
 /*
  * synergy -- mouse and keyboard sharing utility
- * Copyright (C) 2012 Synergy Si Ltd.
+ * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  * 
  * This package is free software; you can redistribute it and/or
@@ -23,18 +23,18 @@
 
 class AppUtil : public IAppUtil {
 public:
-	AppUtil();
-	virtual ~AppUtil();
+    AppUtil();
+    virtual ~AppUtil();
 
-	virtual void adoptApp(IApp* app);
-	IApp& app() const;
-	virtual void exitApp(int code) { throw XExitApp(code); }
+    virtual void adoptApp(IApp* app);
+    IApp& app() const;
+    virtual void exitApp(int code) { throw XExitApp(code); }
 
-	static AppUtil& instance();
-	static void exitAppStatic(int code) { instance().exitApp(code); }
-	virtual void beforeAppExit() {}
-	
+    static AppUtil& instance();
+    static void exitAppStatic(int code) { instance().exitApp(code); }
+    virtual void beforeAppExit() {}
+    
 private:
-	IApp* m_app;
-	static AppUtil* s_instance;
+    IApp* m_app;
+    static AppUtil* s_instance;
 };

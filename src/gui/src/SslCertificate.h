@@ -1,6 +1,6 @@
 /*
  * synergy -- mouse and keyboard sharing utility
- * Copyright (C) 2015 Synergy Si Ltd.
+ * Copyright (C) 2015-2016 Symless Ltd.
  *
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,22 +26,22 @@ class SslCertificate : public QObject
 Q_OBJECT
 
 public:
-	explicit SslCertificate(QObject *parent = 0);
+    explicit SslCertificate(QObject *parent = 0);
 
 public slots:
-	void generateCertificate();
+    void generateCertificate();
 
 signals:
-	void error(QString e);
-	void info(QString i);
-	void generateFinished();
+    void error(QString e);
+    void info(QString i);
+    void generateFinished();
 
 private:
-	bool runTool(const QStringList& args);
-	void generateFingerprint(const QString& certificateFilename);
+    bool runTool(const QStringList& args);
+    void generateFingerprint(const QString& certificateFilename);
 
 private:
-	QString m_ProfileDir;
-	QString m_ToolOutput;
-	CoreInterface m_CoreInterface;
+    QString m_ProfileDir;
+    QString m_ToolOutput;
+    CoreInterface m_CoreInterface;
 };

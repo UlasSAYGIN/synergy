@@ -1,6 +1,6 @@
 /*
  * synergy -- mouse and keyboard sharing utility
- * Copyright (C) 2012 Synergy Si Ltd.
+ * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2008 Volker Lanz (vl@fidra.de)
  * 
  * This package is free software; you can redistribute it and/or
@@ -32,25 +32,25 @@ class ServerConfig;
 
 class ActionDialog : public QDialog, public Ui::ActionDialogBase
 {
-	Q_OBJECT
+    Q_OBJECT
 
-	public:
-		ActionDialog(QWidget* parent, ServerConfig& config, Hotkey& hotkey, Action& action);
+    public:
+        ActionDialog(QWidget* parent, ServerConfig& config, Hotkey& hotkey, Action& action);
 
-	protected slots:
-		void accept();
-		void on_m_pKeySequenceWidgetHotkey_keySequenceChanged();
+    protected slots:
+        void accept();
+        void on_m_pKeySequenceWidgetHotkey_keySequenceChanged();
 
-	protected:
-		const KeySequenceWidget* sequenceWidget() const { return m_pKeySequenceWidgetHotkey; }
-		const ServerConfig& serverConfig() const { return m_ServerConfig; }
+    protected:
+        const KeySequenceWidget* sequenceWidget() const { return m_pKeySequenceWidgetHotkey; }
+        const ServerConfig& serverConfig() const { return m_ServerConfig; }
 
-	private:
-		const ServerConfig& m_ServerConfig;
-		Hotkey& m_Hotkey;
-		Action& m_Action;
+    private:
+        const ServerConfig& m_ServerConfig;
+        Hotkey& m_Hotkey;
+        Action& m_Action;
 
-		QButtonGroup* m_pButtonGroupType;
+        QButtonGroup* m_pButtonGroupType;
 };
 
 #endif

@@ -1,6 +1,6 @@
 /*
  * synergy -- mouse and keyboard sharing utility
- * Copyright (C) 2012 Synergy Si Ltd.
+ * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2004 Chris Schoeneman
  * 
  * This package is free software; you can redistribute it and/or
@@ -30,30 +30,30 @@ Filters a stream to read and write packets.
 */
 class PacketStreamFilter : public StreamFilter {
 public:
-	PacketStreamFilter(IEventQueue* events, synergy::IStream* stream, bool adoptStream = true);
-	~PacketStreamFilter();
+    PacketStreamFilter(IEventQueue* events, synergy::IStream* stream, bool adoptStream = true);
+    ~PacketStreamFilter();
 
-	// IStream overrides
-	virtual void		close();
-	virtual UInt32		read(void* buffer, UInt32 n);
-	virtual void		write(const void* buffer, UInt32 n);
-	virtual void		shutdownInput();
-	virtual bool		isReady() const;
-	virtual UInt32		getSize() const;
+    // IStream overrides
+    virtual void        close();
+    virtual UInt32        read(void* buffer, UInt32 n);
+    virtual void        write(const void* buffer, UInt32 n);
+    virtual void        shutdownInput();
+    virtual bool        isReady() const;
+    virtual UInt32        getSize() const;
 
 protected:
-	// StreamFilter overrides
-	virtual void		filterEvent(const Event&);
+    // StreamFilter overrides
+    virtual void        filterEvent(const Event&);
 
 private:
-	bool				isReadyNoLock() const;
-	void				readPacketSize();
-	bool				readMore();
+    bool                isReadyNoLock() const;
+    void                readPacketSize();
+    bool                readMore();
 
 private:
-	Mutex				m_mutex;
-	UInt32				m_size;
-	StreamBuffer		m_buffer;
-	bool				m_inputShutdown;
-	IEventQueue*		m_events;
+    Mutex                m_mutex;
+    UInt32                m_size;
+    StreamBuffer        m_buffer;
+    bool                m_inputShutdown;
+    IEventQueue*        m_events;
 };

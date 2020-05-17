@@ -1,6 +1,6 @@
 /*
  * synergy -- mouse and keyboard sharing utility
- * Copyright (C) 2015 Synergy Si Ltd.
+ * Copyright (C) 2015-2016 Symless Ltd.
  *
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,25 +22,25 @@
 class Fingerprint
 {
 private:
-	Fingerprint(const QString& filename);
+    Fingerprint(const QString& filename);
 
 public:
-	void trust(const QString& fingerprintText, bool append = true);
-	bool isTrusted(const QString& fingerprintText);
-	QStringList readList(const int readTo = -1);
-	QString readFirst();
-	QString filePath() const;
-	bool fileExists() const;
+    void trust(const QString& fingerprintText, bool append = true);
+    bool isTrusted(const QString& fingerprintText);
+    QStringList readList(const int readTo = -1);
+    QString readFirst();
+    QString filePath() const;
+    bool fileExists() const;
 
 public:
-	static Fingerprint local();
-	static Fingerprint trustedServers();
-	static Fingerprint trustedClients();
-	static QString directoryPath();
-	static QString localFingerprint();
-	static bool localFingerprintExists();
-	static void persistDirectory();
+    static Fingerprint local();
+    static Fingerprint trustedServers();
+    static Fingerprint trustedClients();
+    static QString directoryPath();
+    static QString localFingerprint();
+    static bool localFingerprintExists();
+    static void persistDirectory();
 
 private:
-	QString m_Filename;
+    QString m_Filename;
 };

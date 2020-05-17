@@ -1,6 +1,6 @@
 /*
  * synergy -- mouse and keyboard sharing utility
- * Copyright (C) 2012 Synergy Si Ltd.
+ * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  * 
  * This package is free software; you can redistribute it and/or
@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "base/EventTypes.h"
+#include "common/basic_types.h"
 
 //! Key ID
 /*!
@@ -110,10 +110,12 @@ static const KeyID		kKeyScrollLock	= 0xEF14;
 static const KeyID		kKeySysReq		= 0xEF15;
 static const KeyID		kKeyEscape		= 0xEF1B;
 static const KeyID		kKeyHenkan		= 0xEF23;	/* Start/Stop Conversion */
-static const KeyID		kKeyHangulKana	= 0xEF26;	/* Hangul, Kana */
+static const KeyID		kKeyKana		= 0xEF26;	/* Kana */
 static const KeyID		kKeyHiraganaKatakana = 0xEF27;	/* Hiragana/Katakana toggle */
 static const KeyID		kKeyZenkaku		= 0xEF2A;	/* Zenkaku/Hankaku */
-static const KeyID		kKeyHanjaKanzi	= 0xEF2A;	/* Hanja, Kanzi */
+static const KeyID		kKeyKanzi		= 0xEF2A;	/* Kanzi */
+static const KeyID		kKeyHangul		= 0xEF31;	/* Hangul */
+static const KeyID		kKeyHanja		= 0xEF34;	/* Hanja */
 static const KeyID		kKeyDelete		= 0xEFFF;	/* Delete, rubout */
 
 // cursor control
@@ -280,16 +282,18 @@ static const KeyID		kKeyAppMail			= 0xE0B4;
 static const KeyID		kKeyAppMedia		= 0xE0B5;
 static const KeyID		kKeyAppUser1		= 0xE0B6;
 static const KeyID		kKeyAppUser2		= 0xE0B7;
+static const KeyID		kKeyBrightnessDown	= 0xE0B8;
+static const KeyID		kKeyBrightnessUp	= 0xE0B9;
+static const KeyID		kKeyMissionControl	= 0xE0C0;
+static const KeyID		kKeyLaunchpad		= 0xE0C1;
 
 //@}
 
 struct KeyNameMapEntry {
-public:
 	const char*			m_name;
 	KeyID			 	m_id;
 };
 struct KeyModifierNameMapEntry {
-public:
 	const char*			m_name;
 	KeyModifierMask 	m_mask;
 };
@@ -300,11 +304,11 @@ A table of key names to the corresponding KeyID.  Only the keys listed
 above plus non-alphanumeric ASCII characters are in the table.  The end
 of the table is the first pair with a NULL m_name.
 */
-extern const KeyNameMapEntry kKeyNameMap[];
+extern const struct KeyNameMapEntry kKeyNameMap[];
 
 //! Modifier key name to KeyModifierMask table
 /*!
 A table of modifier key names to the corresponding KeyModifierMask.
 The end of the table is the first pair with a NULL m_name.
 */
-extern const KeyModifierNameMapEntry kModifierNameMap[];
+extern const struct KeyModifierNameMapEntry kModifierNameMap[];

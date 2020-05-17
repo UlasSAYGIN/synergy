@@ -1,6 +1,6 @@
 /*
  * synergy -- mouse and keyboard sharing utility
- * Copyright (C) 2015 Synergy Si Ltd.
+ * Copyright (C) 2015-2016 Symless Ltd.
  *
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,11 +18,11 @@
 #pragma once
 
 enum qProcessorArch {
-	kProcessorArchWin32,
-	kProcessorArchWin64,
-	kProcessorArchMac32,
-	kProcessorArchMac64,
-	kProcessorArchLinux32,
-	kProcessorArchLinux64,
-	kProcessorArchUnknown
+    kProcessorArchWin32,
+    kProcessorArchWin64,
+    kProcessorArchMac32,
+    kProcessorArchMac64,
+    kProcessorArchLinux32,
+    kProcessorArchLinux64,
+    kProcessorArchUnknown
 };

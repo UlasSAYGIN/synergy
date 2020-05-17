@@ -1,6 +1,6 @@
 /*
  * synergy -- mouse and keyboard sharing utility
- * Copyright (C) 2012 Synergy Si Ltd.
+ * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2002 Chris Schoeneman
  * 
  * This package is free software; you can redistribute it and/or
@@ -23,9 +23,9 @@
 
 class IAppUtil : public IInterface {
 public:
-	virtual void adoptApp(IApp* app) = 0;
-	virtual IApp& app() const = 0;
-	virtual int run(int argc, char** argv) = 0;
-	virtual void beforeAppExit() = 0;
-	virtual void startNode() = 0;
+    virtual void adoptApp(IApp* app) = 0;
+    virtual IApp& app() const = 0;
+    virtual int run(int argc, char** argv) = 0;
+    virtual void beforeAppExit() = 0;
+    virtual void startNode() = 0;
 };

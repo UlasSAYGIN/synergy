@@ -1,6 +1,6 @@
 /*
  * synergy -- mouse and keyboard sharing utility
- * Copyright (C) 2015 Synergy Si Ltd.
+ * Copyright (C) 2015-2016 Symless Ltd.
  *
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,15 +22,11 @@
 class CoreInterface
 {
 public:
-	CoreInterface();
+    CoreInterface();
 
-	QString getPluginDir();
-	QString getProfileDir();
-	QString getInstalledDir();
-	QString getArch();
-	QString getSubscriptionFilename();
-	QString activateSerial(const QString& serial);
-	QString checkSubscription();
-	QString notifyActivation(const QString& identity);
-	QString run(const QStringList& args, const QString& input = "");
+    QString getProfileDir();
+    QString getInstalledDir();
+    QString getArch();
+    QString getSerialKeyFilePath();
+    QString run(const QStringList& args, const QString& input = "");
 };

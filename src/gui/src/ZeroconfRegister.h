@@ -1,6 +1,6 @@
 /*
  * synergy -- mouse and keyboard sharing utility
- * Copyright (C) 2014 Synergy Si Ltd.
+ * Copyright (C) 2014-2016 Symless Ltd.
  *
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,29 +33,29 @@ class QSocketNotifier;
 
 class ZeroconfRegister : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	ZeroconfRegister(QObject* parent = 0);
-	~ZeroconfRegister();
+    ZeroconfRegister(QObject* parent = 0);
+    ~ZeroconfRegister();
 
-	void registerService(const ZeroconfRecord& record, quint16 servicePort);
-	inline ZeroconfRecord registeredRecord() const { return finalRecord; }
+    void registerService(const ZeroconfRecord& record, quint16 servicePort);
+    inline ZeroconfRecord registeredRecord() const { return finalRecord; }
 
 signals:
-	void error(DNSServiceErrorType error);
-	void serviceRegistered(const ZeroconfRecord& record);
+    void error(DNSServiceErrorType error);
+    void serviceRegistered(const ZeroconfRecord& record);
 
 private slots:
-	void socketReadyRead();
+    void socketReadyRead();
 
 private:
-	static void DNSSD_API registerService(DNSServiceRef sdRef,
-		DNSServiceFlags, DNSServiceErrorType errorCode, const char* name,
-		const char* regtype, const char* domain, void* context);
+    static void DNSSD_API registerService(DNSServiceRef sdRef,
+        DNSServiceFlags, DNSServiceErrorType errorCode, const char* name,
+        const char* regtype, const char* domain, void* context);
 
 private:
-	DNSServiceRef m_DnsServiceRef;
-	QSocketNotifier* m_pSocket;
-	ZeroconfRecord finalRecord;
+    DNSServiceRef m_DnsServiceRef;
+    QSocketNotifier* m_pSocket;
+    ZeroconfRecord finalRecord;
 };

@@ -1,6 +1,6 @@
 /*
  * synergy -- mouse and keyboard sharing utility
- * Copyright (C) 2012 Synergy Si Ltd.
+ * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2012 Nick Bolton
  *
  * This package is free software; you can redistribute it and/or
@@ -21,41 +21,43 @@
 #include <QObject>
 #include <QAbstractSocket>
 
+#include "ElevateMode.h"
+
 class QTcpSocket;
 class IpcReader;
 
 class IpcClient : public QObject
 {
-	 Q_OBJECT
+     Q_OBJECT
 
 public:
-	IpcClient();
-	virtual ~IpcClient();
+    IpcClient();
+    virtual ~IpcClient();
 
-	void sendHello();
-	void sendCommand(const QString& command, bool elevate);
-	void connectToHost();
-	void disconnectFromHost();
+    void sendHello();
+    void sendCommand(const QString& command, ElevateMode elevate);
+    void connectToHost();
+    void disconnectFromHost();
 
 public slots:
-	void retryConnect();
+    void retryConnect();
 
 private:
-	void intToBytes(int value, char* buffer, int size);
+    void intToBytes(int value, char* buffer, int size);
 
 private slots:
-	void connected();
-	void error(QAbstractSocket::SocketError error);
-	void handleReadLogLine(const QString& text);
+    void connected();
+    void error(QAbstractSocket::SocketError error);
+    void handleReadLogLine(const QString& text);
 
 signals:
-	void readLogLine(const QString& text);
-	void infoMessage(const QString& text);
-	void errorMessage(const QString& text);
+    void readLogLine(const QString& text);
+    void infoMessage(const QString& text);
+    void errorMessage(const QString& text);
 
 private:
-	QTcpSocket* m_Socket;
-	IpcReader* m_Reader;
-	bool m_ReaderStarted;
-	bool m_Enabled;
+    QTcpSocket* m_Socket;
+    IpcReader* m_Reader;
+    bool m_ReaderStarted;
+    bool m_Enabled;
 };

@@ -1,6 +1,6 @@
 /*
  * synergy -- mouse and keyboard sharing utility
- * Copyright (C) 2012 Synergy Si Ltd.
+ * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2004 Chris Schoeneman
  * 
  * This package is free software; you can redistribute it and/or
@@ -25,12 +25,12 @@ class BufferedLogOutputter;
 //! Implementation of ServerTaskBarReceiver for OS X
 class OSXServerTaskBarReceiver : public ServerTaskBarReceiver {
 public:
-	OSXServerTaskBarReceiver(const BufferedLogOutputter*, IEventQueue* events);
-	virtual ~OSXServerTaskBarReceiver();
+    OSXServerTaskBarReceiver(const BufferedLogOutputter*, IEventQueue* events);
+    virtual ~OSXServerTaskBarReceiver();
 
-	// IArchTaskBarReceiver overrides
-	virtual void		showStatus();
-	virtual void		runMenu(int x, int y);
-	virtual void		primaryAction();
-	virtual const Icon	getIcon() const;
+    // IArchTaskBarReceiver overrides
+    virtual void        showStatus();
+    virtual void        runMenu(int x, int y);
+    virtual void        primaryAction();
+    virtual const Icon    getIcon() const;
 };

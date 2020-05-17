@@ -1,6 +1,6 @@
 /*
  * synergy -- mouse and keyboard sharing utility
- * Copyright (C) 2014 Synergy Si Ltd.
+ * Copyright (C) 2014-2016 Symless Ltd.
  *
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,30 +28,30 @@ class QSocketNotifier;
 
 class ZeroconfBrowser : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	ZeroconfBrowser(QObject* parent = 0);
-	~ZeroconfBrowser();
-	void browseForType(const QString& type);
-	inline QList<ZeroconfRecord> currentRecords() const { return m_Records; }
-	inline QString serviceType() const { return m_BrowsingType; }
+    ZeroconfBrowser(QObject* parent = 0);
+    ~ZeroconfBrowser();
+    void browseForType(const QString& type);
+    inline QList<ZeroconfRecord> currentRecords() const { return m_Records; }
+    inline QString serviceType() const { return m_BrowsingType; }
 
 signals:
-	void currentRecordsChanged(const QList<ZeroconfRecord>& list);
-	void error(DNSServiceErrorType err);
+    void currentRecordsChanged(const QList<ZeroconfRecord>& list);
+    void error(DNSServiceErrorType err);
 
 private slots:
-	void socketReadyRead();
+    void socketReadyRead();
 
 private:
-	static void DNSSD_API browseReply(DNSServiceRef, DNSServiceFlags flags,
-			quint32, DNSServiceErrorType errorCode, const char* serviceName,
-			const char* regType, const char* replyDomain, void* context);
+    static void DNSSD_API browseReply(DNSServiceRef, DNSServiceFlags flags,
+            quint32, DNSServiceErrorType errorCode, const char* serviceName,
+            const char* regType, const char* replyDomain, void* context);
 
 private:
-	DNSServiceRef m_DnsServiceRef;
-	QSocketNotifier* m_pSocket;
-	QList<ZeroconfRecord> m_Records;
-	QString m_BrowsingType;
+    DNSServiceRef m_DnsServiceRef;
+    QSocketNotifier* m_pSocket;
+    QList<ZeroconfRecord> m_Records;
+    QString m_BrowsingType;
 };

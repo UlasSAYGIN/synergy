@@ -1,12 +1,12 @@
 /*
  * synergy -- mouse and keyboard sharing utility
- * Copyright (C) 2012 Synergy Si Ltd.
+ * Copyright (C) 2012-2016 Symless Ltd.
  * Copyright (C) 2008 Volker Lanz (vl@fidra.de)
- * 
+ *
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * found in the file LICENSE that should have accompanied this file.
- * 
+ *
  * This package is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -20,7 +20,13 @@
 
 #define APPCONFIG_H
 
+#include <QObject>
 #include <QString>
+#include <QVariant>
+#include "ElevateMode.h"
+#include <shared/EditionType.h>
+#include <mutex>
+#include "ConfigBase.h"
 
 // this should be incremented each time a new page is added. this is
 // saved to settings when the user finishes running the wizard. if
@@ -34,109 +40,230 @@
 //   4: ssl plugin 'ns' v1.0
 //   5: ssl plugin 'ns' v1.1
 //   6: ssl plugin 'ns' v1.2
+//   7: serial key activation
+//   8: Visual Studio 2015 support
 //
-const int kWizardVersion = 6;
+const int kWizardVersion = 8;
 
 class QSettings;
 class SettingsDialog;
 
 enum ProcessMode {
-	Service,
-	Desktop
+    Service,
+    Desktop
 };
 
-class AppConfig
+class AppConfig: public QObject, public GUI::Config::ConfigBase
 {
-	friend class SettingsDialog;
-	friend class MainWindow;
-	friend class SetupWizard;
+    Q_OBJECT
 
-	public:
-		AppConfig(QSettings* settings);
-		~AppConfig();
+    friend class SettingsDialog;
+    friend class MainWindow;
+    friend class SetupWizard;
 
-	public:
-		const QString& screenName() const { return m_ScreenName; }
-		int port() const { return m_Port; }
-		const QString& interface() const { return m_Interface; }
-		int logLevel() const { return m_LogLevel; }
-		bool logToFile() const { return m_LogToFile; }
-		const QString& logFilename() const { return m_LogFilename; }
-		const QString logFilenameCmd() const;
-		QString logLevelText() const;
-		ProcessMode processMode() const { return m_ProcessMode; }
-		bool wizardShouldRun() const { return m_WizardLastRun < kWizardVersion; }
-		const QString& language() const { return m_Language; }
-		bool startedBefore() const { return m_StartedBefore; }
-		bool autoConfig() const { return m_AutoConfig; }
-		void setAutoConfig(bool autoConfig);
-		bool autoConfigPrompted()  { return m_AutoConfigPrompted; }
-		void setAutoConfigPrompted(bool prompted);
-		void setEdition(int e) { m_Edition = e; }
-		int edition() { return m_Edition; }
-		void setActivateEmail(QString e) { m_ActivateEmail = e; }
-		QString activateEmail() { return m_ActivateEmail; }
-		void setSerialKey(QString serial) { m_Serialkey = serial; }
-		QString serialKey() { return m_Serialkey; }
-		int lastExpiringWarningTime() const { return m_LastExpiringWarningTime; }
-		void setLastExpiringWarningTime(int t) { m_LastExpiringWarningTime = t; }
+    public:
+        AppConfig();
+        ~AppConfig() override;
 
-		QString synergysName() const { return m_SynergysName; }
-		QString synergycName() const { return m_SynergycName; }
-		QString synergyProgramDir() const;
-		QString synergyLogDir() const;
+    public:
 
-		bool detectPath(const QString& name, QString& path);
-		void persistLogDir();
-		bool elevateMode();
+        bool isSystemScoped() const;
 
-		void setCryptoEnabled(bool e) { m_CryptoEnabled = e; }
-		bool getCryptoEnabled() { return m_CryptoEnabled; }
-		void setAutoHide(bool b) { m_AutoHide = b; }
-		bool getAutoHide() { return m_AutoHide; }
+        const QString& screenName() const;
+        int port() const;
+        const QString& networkInterface() const;
+        int logLevel() const;
+        bool logToFile() const;
+        const QString& logFilename() const;
+        const QString logFilenameCmd() const;
+        QString logLevelText() const;
+        ProcessMode processMode() const;
+        bool wizardShouldRun() const;
+        const QString& language() const;
+        bool startedBefore() const;
+        bool autoConfig() const;
+        void setAutoConfig(bool autoConfig);
+        QString autoConfigServer() const;
+        void setAutoConfigServer(const QString& autoConfigServer);
+#ifndef SYNERGY_ENTERPRISE
+        void setEdition(Edition);
+        Edition edition() const;
+        void setSerialKey(const QString& serial);
+        void clearSerialKey();
+        QString serialKey();
+        int lastExpiringWarningTime() const;
+        void setLastExpiringWarningTime(int t);
+#endif
 
-		void saveSettings();
+        QString synergysName() const;
+        QString synergycName() const;
+        QString synergyProgramDir() const;
+        QString synergyLogDir() const;
 
-	protected:
-		QSettings& settings() { return *m_pSettings; }
-		void setScreenName(const QString& s) { m_ScreenName = s; }
-		void setPort(int i) { m_Port = i; }
-		void setInterface(const QString& s) { m_Interface = s; }
-		void setLogLevel(int i) { m_LogLevel = i; }
-		void setLogToFile(bool b) { m_LogToFile = b; }
-		void setLogFilename(const QString& s) { m_LogFilename = s; }
-		void setWizardHasRun() { m_WizardLastRun = kWizardVersion; }
-		void setLanguage(const QString language) { m_Language = language; }
-		void setStartedBefore(bool b) { m_StartedBefore = b; }
-		void setElevateMode(bool b) { m_ElevateMode = b; }
+        void persistLogDir();
+        ElevateMode elevateMode();
 
-		void loadSettings();
+        void setCryptoEnabled(bool e);
+        bool getCryptoEnabled() const;
 
-	private:
-		QSettings* m_pSettings;
-		QString m_ScreenName;
-		int m_Port;
-		QString m_Interface;
-		int m_LogLevel;
-		bool m_LogToFile;
-		QString m_LogFilename;
-		int m_WizardLastRun;
-		ProcessMode m_ProcessMode;
-		QString m_Language;
-		bool m_StartedBefore;
-		bool m_AutoConfig;
-		bool m_ElevateMode;
-		bool m_AutoConfigPrompted;
-		int m_Edition;
-		QString m_ActivateEmail;
-		bool m_CryptoEnabled;
-		bool m_AutoHide;
-		QString m_Serialkey;
-		int m_LastExpiringWarningTime;
+        void setAutoHide(bool b);
+        bool getAutoHide();
+#ifndef SYNERGY_ENTERPRISE
+        bool activationHasRun() const;
+        AppConfig& activationHasRun(bool value);
+#endif
+        /// @brief Sets the user preference to load from SystemScope.
+        /// @param [in] value
+        ///             True - This will set the variable, and save the user settings before loading the global scope settings
+        ///             False - This will load the UserScope then set the variable and save.
+        void setLoadFromSystemScope(bool value);
 
-		static const char m_SynergysName[];
-		static const char m_SynergycName[];
-		static const char m_SynergyLogDir[];
+
+        bool    getServerGroupChecked() const;
+        bool    getUseExternalConfig() const;
+        QString getConfigFile() const;
+        bool    getUseInternalConfig() const;
+        bool    getClientGroupChecked() const;
+        QString getServerHostname() const;
+
+        void setServerGroupChecked(bool);
+        void setUseExternalConfig(bool) ;
+        void setConfigFile(const QString&);
+        void setUseInternalConfig(bool) ;
+        void setClientGroupChecked(bool) ;
+        void setServerHostname(const QString&);
+
+        QString lastVersion() const;
+
+        void setMinimizeToTray(bool b);
+        bool getMinimizeToTray();
+
+        void saveSettings() override;
+        void setLastVersion(const QString& version);
+
+
+protected:
+    /// @brief The enumeration to easily access the names of the setting inside m_SynergySettingsName
+    enum Setting {
+        kScreenName,
+        kPort,
+        kInterfaceSetting,
+        kLogLevel,
+        kLogToFile,
+        kLogFilename,
+        kWizardLastRun,
+        kLanguage,
+        kStartedBefore,
+        kAutoConfig,
+        kAutoConfigServer,
+        kElevateModeSetting,
+        kElevateModeEnum,
+        kEditionSetting,
+        kCryptoEnabled,
+        kAutoHide,
+        kSerialKey,
+        kLastVersion,
+        kLastExpireWarningTime,
+        kActivationHasRun,
+        kMinimizeToTray,
+        kActivateEmail,
+        kLoadSystemSettings,
+        kGroupServerCheck,
+        kUseExternalConfig,
+        kConfigFile,
+        kUseInternalConfig,
+        kGroupClientCheck,
+        kServerHostname,
+    };
+
+        void setScreenName(const QString& s);
+        void setPort(int i);
+        void setNetworkInterface(const QString& s);
+        void setLogLevel(int i);
+        void setLogToFile(bool b);
+        void setLogFilename(const QString& s);
+        void setWizardHasRun();
+        void setLanguage(const QString& language);
+        void setStartedBefore(bool b);
+        void setElevateMode(ElevateMode em);
+
+        /// @brief loads the setting from the current scope
+        /// @param ignoreSystem should the load feature ignore the globalScope setting that was saved
+        void loadSettings() override;
+        static QString settingName(AppConfig::Setting name);
+
+    private:
+
+        QString m_ScreenName;
+        int m_Port;
+        QString m_Interface;
+        int m_LogLevel;
+        bool m_LogToFile;
+        QString m_LogFilename;
+        int m_WizardLastRun;
+        ProcessMode m_ProcessMode;
+        QString m_Language;
+        bool m_StartedBefore;
+        bool m_AutoConfig;
+        QString m_AutoConfigServer;
+        ElevateMode m_ElevateMode;
+        Edition m_Edition;
+        QString m_ActivateEmail;
+        bool m_CryptoEnabled;
+        bool m_AutoHide;
+        QString m_Serialkey;
+        QString m_lastVersion;
+        int m_LastExpiringWarningTime;
+        bool m_ActivationHasRun;
+        bool m_MinimizeToTray;
+
+        bool m_ServerGroupChecked;
+        bool m_UseExternalConfig;
+        QString m_ConfigFile;
+        bool m_UseInternalConfig;
+        bool m_ClientGroupChecked;
+        QString m_ServerHostname;
+
+        bool m_LoadFromSystemScope;     /// @brief should the setting be loaded from SystemScope
+                                        ///         If the user has settings but this is true then
+                                        ///         system settings will be loaded instead of the users
+
+        static const char m_SynergysName[];
+        static const char m_SynergycName[];
+        static const char m_SynergyLogDir[];
+
+        /// @brief Contains the string values of the settings names that will be saved
+        static const char* m_SynergySettingsName[];
+
+        /// @brief Contains the name of the default configuration filename
+        static const char synergyConfigName[];
+
+        /// @brief Sets the value of a setting
+        /// @param [in] name The Setting to be saved
+        /// @param [in] value The Value to be saved
+        template <typename T>
+        void setSetting(AppConfig::Setting name, T value);
+
+        /// @brief Loads a setting
+        /// @param [in] name The setting to be loaded
+        /// @param [in] defaultValue The default value of the setting
+        QVariant loadSetting(AppConfig::Setting name, const QVariant& defaultValue = QVariant());
+
+        /// @brief As the settings will be accessible by multiple objects this lock will ensure that
+        ///         it cant be modified by more that one object at a time if the setting is being switched
+        ///         from system to user.
+        std::mutex m_settings_lock;
+
+        /// @brief Sets the setting in the config checking if it has changed and flagging that settings
+        ///         needs to be saved if the setting was different
+        /// @param [in] variable the setting that will be changed
+        /// @param [in] newValue The new value of the setting
+        template <typename T>
+        void setSettingModified(T& variable,const T& newValue);
+
+    signals:
+        void sslToggled(bool enabled);
+        void zeroConfToggled();
 };
 
 #endif

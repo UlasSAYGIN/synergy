@@ -1,5 +1,5 @@
 # synergy -- mouse and keyboard sharing utility
-# Copyright (C) 2012 Synergy Si Ltd.
+# Copyright (C) 2012-2016 Symless Ltd.
 # Copyright (C) 2011 Nick Bolton
 # 
 # This package is free software; you can redistribute it and/or
@@ -16,10 +16,9 @@
 
 add_subdirectory(synergyc)
 add_subdirectory(synergys)
-add_subdirectory(synergyd)
-add_subdirectory(usynergy)
 add_subdirectory(syntool)
 
-if (WIN32)
-  add_subdirectory(synergyp)
-endif()
+if (SYNERGY_BUILD_LEGACY_SERVICE)
+	add_subdirectory(synergyd)
+endif (SYNERGY_BUILD_LEGACY_SERVICE)
+

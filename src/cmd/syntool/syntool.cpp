@@ -1,6 +1,6 @@
 /*
  * synergy -- mouse and keyboard sharing utility
- * Copyright (C) 2014 Synergy Si Ltd.
+ * Copyright (C) 2014-2016 Symless Ltd.
  * 
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,10 +22,10 @@ int
 main(int argc, char** argv) 
 {
 #if SYSAPI_WIN32
-	// record window instance for tray icon, etc
-	ArchMiscWindows::setInstanceWin32(GetModuleHandle(NULL));
+    // record window instance for tray icon, etc
+    ArchMiscWindows::setInstanceWin32(GetModuleHandle(NULL));
 #endif
 
-	ToolApp app;
-	return app.run(argc, argv);
+    ToolApp app;
+    return app.run(argc, argv);
 }

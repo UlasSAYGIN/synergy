@@ -1,6 +1,6 @@
 /*
  * synergy -- mouse and keyboard sharing utility
- * Copyright (C) 2014 Synergy Si Ltd.
+ * Copyright (C) 2014-2016 Symless Ltd.
  *
  * This package is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,17 +22,17 @@
 
 class ZeroconfThread : public QThread
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	ZeroconfThread(int socketDescriptor, QObject* parent);
+    ZeroconfThread(int socketDescriptor, QObject* parent);
 
-	void run();
+    void run();
 
 signals:
-	void error(QTcpSocket::SocketError socketError);
+    void error(QTcpSocket::SocketError socketError);
 
 private:
-	int m_SocketDescriptor;
-	QString m_Text;
+    int m_SocketDescriptor;
+    QString m_Text;
 };
